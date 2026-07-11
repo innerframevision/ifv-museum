@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inner Frame Vision</title>
+
+<style>
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(to bottom,#666666 0%,#000000 45%,#000000 100%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    font-family:Arial,sans-serif;
+}
+
+.top-marker{
+    margin-top:60px;
+    width:60px;
+}
+
+.main-frame{
+    width:650px;
+    max-width:80vw;
+    margin-top:60px;
+    transition:0.3s;
+}
+
+.main-frame:hover{
+    transform:scale(1.01);
+}
+
+.bottom-marker{
+    margin-top:80px;
+    width:60px;
+}
+
+.footer{
+    max-width:900px;
+    width:80%;
+    color:#9b7843;
+    font-size:12px;
+    line-height:1.6;
+    margin-top:120px;
+    margin-bottom:50px;
+}
+
+.placeholder{
+    width:650px;
+    height:850px;
+    max-width:80vw;
+    background:#111;
+    border:4px solid #7c5a2f;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#9b7843;
+    font-size:28px;
+    text-align:center;
+}
+
+.small-placeholder{
+    width:60px;
+    height:80px;
+    background:#111;
+    border:2px solid #7c5a2f;
+}
+
+.small-logo{
+    width:60px;
+}
+
+</style>
+
+</head>
+<body>
+
+<img src="Logo.jpeg" class="small-logo">
+
+<h1 style="color:#b8924f; font-size:42px; letter-spacing:8px; margin:35px 0 8px 0; font-weight:normal;">
+INNER FRAME VISION
+</h1>
+
+<div style="color:#8f7843; font-size:18px; letter-spacing:12px; margin-bottom:45px;">
+MUSEUM
+</div>
+
+<a href="grid.html">
+    <img src="tabularium.jpg" class="main-frame">
+</a>
+
+<div style="margin-top:40px; color:#b8924f; font-size:26px; font-style:italic; letter-spacing:2px;">
+    Tabularium
+</div>
+
+<a href="atrium.html">
+    <img src="atrium.jpg" class="main-frame">
+</a>
+
+<div style="margin-top:40px; color:#b8924f; font-size:26px; font-style:italic; letter-spacing:2px;">
+    Atrium
+</div>
+
+<a href="pinacotheca.html">
+    <img src="pinacotheca.jpg" class="main-frame">
+</a>
+
+<div style="margin-top:40px; color:#b8924f; font-size:26px; font-style:italic; letter-spacing:2px;">
+    Pinacotheca
+</div>
+
+<div class="footer">
+© IFVision | Inner Frame Vision®<br><br>
+
+Cinema • Literature • Visual Art<br>
+
+Exploring the architecture of human consciousness.
+</div>
+
+</body>
+</html>
