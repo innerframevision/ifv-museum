@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Inner Frame Vision — Inner Frame Constructs</title>
+
+<style>
+
+html, body{
+    margin:0;
+    min-height:100%;
+    background:linear-gradient(to bottom,#666666 0%,#000000 45%,#000000 100%);
+    font-family:Arial,sans-serif;
+    color:#9b7843;
+}
+
+body{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.logo{
+    width:60px;
+    margin-top:60px;
+}
+
+h1{
+    color:#b8924f;
+    font-size:42px;
+    letter-spacing:8px;
+    font-weight:normal;
+    margin:35px 0 8px 0;
+}
+
+.subtitle{
+    color:#8f7843;
+    font-size:18px;
+    letter-spacing:12px;
+    margin-bottom:60px;
+}
+
+.gallery{
+    width:80vw;
+    max-width:1000px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:38px;
+    margin-bottom:90px;
+}
+
+.gallery a{
+    display:block;
+    border:3px solid #7c5a2f;
+    background:#111;
+    overflow:hidden;
+    transition:0.3s;
+}
+
+.gallery a:hover{
+    transform:scale(1.03);
+}
+
+.gallery img{
+    width:100%;
+    display:block;
+}
+
+.footer{
+    max-width:900px;
+    width:80%;
+    color:#9b7843;
+    font-size:12px;
+    line-height:1.6;
+    text-align:center;
+    margin-bottom:50px;
+}
+
+@media (max-width:800px){
+
+.gallery{
+grid-template-columns:1fr;
+width:82vw;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<img src="Logo.jpeg" class="logo">
+
+<h1>INNER FRAME VISION</h1>
+
+<div class="subtitle">
+INNER FRAME CONSTRUCTS
+</div>
+
+<div class="gallery">
+
+<a href="work1.html"><img src="constructs.jpg"></a>
+<a href="work2.html"><img src="constructs.jpg"></a>
+<a href="work3.html"><img src="constructs.jpg"></a>
+
+<a href="work4.html"><img src="constructs.jpg"></a>
+<a href="work5.html"><img src="constructs.jpg"></a>
+<a href="work6.html"><img src="constructs.jpg"></a>
+
+<a href="work7.html"><img src="constructs.jpg"></a>
+<a href="work8.html"><img src="constructs.jpg"></a>
+<a href="work9.html"><img src="constructs.jpg"></a>
+
+</div>
+
+<div class="footer">
+
+© IFVision | Inner Frame Vision®<br><br>
+
+European Union Intellectual Property Office (EUIPO)<br>
+Registration No. 019190623<br><br>
+
+Inner Frame Constructs is an official artistic direction within the Inner Frame Vision system.
+
+</div>
+
+</body>
+</html>
