@@ -125,7 +125,7 @@ button.addEventListener("click", async (event) => {
         return;
       }
 
-      if (savedUrl) {
+      if (savedUrl && access.status !== "expired") {
         const resume = new URL(savedUrl);
 
         if (
