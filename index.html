@@ -55,12 +55,121 @@ html, body {
 <body>
 
 <div class="entrance">
-    <a
-        class="enter-button"
-       href="https://nowpayments.io/payment/?iid=6066297162"
-        aria-label="Enter the Inner Frame Vision Museum">
-    </a>
+  <a
+    class="enter-button"
+    href="museum.html"
+    aria-label="Enter the Inner Frame Vision Museum">
+  </a>
 </div>
+
+<p id="payment-message" role="status" style="
+  position:fixed;
+  bottom:20px;
+  left:5%;
+  width:90%;
+  text-align:center;
+  color:#fff;
+  background:#080604;
+  z-index:20;
+" hidden></p>
+
+<script>
+const API_BASE =
+  "https://zzjetguwyocfxiwdhmmt.supabase.co/functions/v1";
+
+const button = document.querySelector(".enter-button");
+const message = document.getElementById("payment-message");
+const TOKEN_KEY = "ifv_checkout_token";
+const URL_KEY = "ifv_checkout_url";
+let busy = false;
+
+function showMessage(text) {
+  message.textContent = text;
+  message.hidden = false;
+}
+
+async function request(name, body) {
+  const response = await fetch(`${API_BASE}/${name}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(60000)
+  });
+
+  if (!response.ok) {
+    throw new Error("Request failed");
+  }
+
+  return response.json();
+}
+
+button.addEventListener("click", async (event) => {
+  event.preventDefault();
+  if (busy) return;
+
+  busy = true;
+  button.setAttribute("aria-disabled", "true");
+  showMessage("Preparing your museum visit…");
+
+  try {
+    const savedToken = localStorage.getItem(TOKEN_KEY);
+    const savedUrl = localStorage.getItem(URL_KEY);
+
+    if (savedToken && /^[a-f0-9]{64}$/.test(savedToken)) {
+      const access = await request("check-museum-access", {
+        checkout_token: savedToken
+      });
+
+      if (access.paid === true) {
+        window.location.assign("museum.html");
+        return;
+      }
+
+      if (savedUrl) {
+        const resume = new URL(savedUrl);
+
+        if (
+          resume.protocol === "https:" &&
+          resume.hostname === "nowpayments.io"
+        ) {
+          window.location.assign(resume.href);
+          return;
+        }
+      }
+    }
+
+    const checkout = await request("create-museum-payment", {});
+
+    if (
+      typeof checkout.checkout_token !== "string" ||
+      !/^[a-f0-9]{64}$/.test(checkout.checkout_token) ||
+      typeof checkout.invoice_url !== "string"
+    ) {
+      throw new Error("Invalid checkout");
+    }
+
+    const paymentUrl = new URL(checkout.invoice_url);
+
+    if (
+      paymentUrl.protocol !== "https:" ||
+      paymentUrl.hostname !== "nowpayments.io"
+    ) {
+      throw new Error("Invalid payment URL");
+    }
+
+    localStorage.setItem(TOKEN_KEY, checkout.checkout_token);
+    localStorage.setItem(URL_KEY, paymentUrl.href);
+
+    window.location.assign(paymentUrl.href);
+  } catch {
+    showMessage(
+      "Unable to open payment. Please allow browser storage and try again."
+    );
+    busy = false;
+    button.removeAttribute("aria-disabled");
+  }
+});
+</script>
 
 </body>
 </html>
