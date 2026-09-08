@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="log.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест интерфейса — Inner Frame Vision</title><meta name="robots" content="noindex,nofollow">
+
+<style>
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(to bottom,#666666 0%,#000000 45%,#000000 100%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    font-family:Arial,sans-serif;
+}
+
+.top-marker{
+    margin-top:60px;
+    width:60px;
+}
+
+.main-frame{
+    width:650px;
+    max-width:80vw;
+    margin-top:60px;
+    transition:0.3s;
+}
+
+.main-frame:hover{
+    transform:scale(1.01);
+}
+
+.bottom-marker{
+    margin-top:80px;
+    width:60px;
+}
+
+.footer{
+    max-width:900px;
+    width:80%;
+    color:#9b7843;
+    font-size:12px;
+    line-height:1.6;
+    margin-top:120px;
+    margin-bottom:50px;
+}
+
+.placeholder{
+    width:650px;
+    height:850px;
+    max-width:80vw;
+    background:#111;
+    border:4px solid #7c5a2f;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#9b7843;
+    font-size:28px;
+    text-align:center;
+}
+
+.small-placeholder{
+    width:60px;
+    height:80px;
+    background:#111;
+    border:2px solid #7c5a2f;
+}
+
+.small-logo{
+    width:60px;
+}
+
+</style>
+<style>
+body:not([data-access="granted"]) > :not(#access-gate):not(#test-controls) {
+  display: none !important;
+}
+
+#access-gate {
+  max-width: 540px;
+  margin: 100px 24px;
+  padding: 30px;
+  text-align: center;
+  color: #e3c794;
+  background: #17130e;
+  border: 1px solid #9b7843;
+  line-height: 1.6;
+}
+
+#access-gate button,
+#access-gate a {
+  display: inline-block;
+  margin: 12px;
+  padding: 12px 20px;
+  color: #e3c794;
+  background: #17130e;
+  border: 1px solid #9b7843;
+  font: inherit;
+  cursor: pointer;
+}
+#access-gate [hidden] {
+  display: none !important;
+}</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const gate = document.createElement("section");
+  gate.id = "access-gate";
+  gate.innerHTML = `
+    <h1>Welcome to the Museum</h1>
+    <p id="access-message" role="status">Checking your payment…</p>
+    <button id="access-retry" type="button" hidden>Check again</button>
+    <a href="index.html">Back to entrance</a>
+  `;
+  document.body.prepend(gate);
+
+  const message = document.getElementById("access-message");
+  const retry = document.getElementById("access-retry");
+// Local UI simulation. No payment API or browser storage.
+const token = "0".repeat(64);
+const endpoint = "local-ui-simulation";
+let attempts = 0;
+let busy = false;
+const scenario = new URLSearchParams(location.search).get("scenario") || "waiting";
+async function simulatedFetch() {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  if (scenario === "error") throw new Error("Simulated error");
+  return { ok: true, json: async () => ({ paid: scenario === "paid" }) };
+}
+  async function checkPayment() {
+    if (busy) return;
+    busy = true;
+    retry.hidden = true;
+    attempts += 1;
+
+    try {
+      const response = await simulatedFetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ checkout_token: token }),
+        signal: AbortSignal.timeout(60000)
+      });
+
+      if (!response.ok) {
+        throw new Error("Payment check failed");
+      }
+
+      const result = await response.json();
+
+      if (result.paid === true) {
+        document.body.dataset.access = "granted";
+        gate.remove();
+        return;
+      }
+
+      message.textContent =
+        "Your payment has not been confirmed yet. This page will check again automatically.";
+
+      if (attempts < 30) {
+        setTimeout(checkPayment, 10000);
+      } else {
+        message.textContent =
+          "Confirmation is taking longer than expected. You can check again below.";
+        retry.hidden = false;
+      }
+    } catch {
+      message.textContent =
+        "We could not check your payment. Please try again.";
+      retry.hidden = false;
+    } finally {
+      busy = false;
+    }
+  }
+
+  retry.addEventListener("click", () => {
+    attempts = 0;
+    message.textContent = "Checking your payment…";
+    checkPayment();
+  });
+
+  checkPayment();
+});
+</script>
+</head>
+    
+<body>
+<section id="test-controls" style="box-sizing:border-box;width:100%;padding:20px;background:#fff3cf;color:#211a0d;text-align:center;line-height:1.6">
+<strong>ТЕСТ ИНТЕРФЕЙСА — имитация, без проверки оплаты</strong><br>
+Это отдельная копия страницы. Кнопки выбирают искусственный ответ для проверки отображения.<br>
+<a href="museum-ui-test.html?scenario=waiting">1. Ожидание</a> ·
+<a href="museum-ui-test.html?scenario=paid">2. Подтверждение (имитация)</a> ·
+<a href="museum-ui-test.html?scenario=error">3. Ошибка связи</a>
+</section>
+
+
+<img src="Logo.jpeg" class="small-logo">
+
+<h1 style="color:#b8924f; font-size:42px; letter-spacing:8px; margin:35px 0 8px 0; font-weight:normal;">
+INNER FRAME VISION
+</h1>
+
+<div style="color:#8f7843; font-size:18px; letter-spacing:12px; margin-bottom:45px;">
+MUSEUM
+</div>
+
+<a href="tabularium.html">
+    <img src="tabularium.jpg" class="main-frame">
+</a>
+
+<div style="margin-top:40px; color:#b8924f; font-size:26px; font-style:italic; letter-spacing:2px;">
+    Tabularium
+</div>
+<a href="discovery.html">
+    <img src="atrium.jpg" class="main-frame">
+</a>
+
+<div style="margin-top:40px; color:#b8924f; font-size:26px; font-style:italic; letter-spacing:2px;">
+    Atrium
+</div>
+
+<a href="pinacotheca.html">
+    <img src="pinacotheca.jpg" class="main-frame">
+</a>
+
+<div style="margin-top:40px; color:#b8924f; font-size:26px; font-style:italic; letter-spacing:2px;">
+    Pinacotheca
+</div>
+  
+
+<div class="footer">
+© IFVision | Inner Frame Vision®<br><br>
+
+Cinema • Literature • Visual Art<br>
+
+Exploring the architecture of human consciousness.
+</div>
+
+</body>
+</html>
