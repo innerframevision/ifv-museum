@@ -54,7 +54,6 @@ html, body {
 .room {
     position: relative;
     width: 100%;
-    max-width: 1600px;
     margin: 0 auto;
     overflow: hidden;
     background: #000;
@@ -72,16 +71,15 @@ html, body {
 .room-video {
     position: absolute;
 
-    left: 50%;
-    top: 48%;
+    left: 49%;
+    top: 47%;
 
-    width: 28%;
-    aspect-ratio: 16 / 9;
+    width: 26%;
+    height: auto;
 
     transform: translate(-50%, -50%);
 
-    object-fit: cover;
-    background: #000000;
+    object-fit: contain;
 }
 
 
