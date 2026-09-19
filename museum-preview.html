@@ -75,10 +75,6 @@ body{
 }
 
 </style>
-<style>
-body:not([data-access="granted"]) > :not(#access-gate) {
-  display: none !important;
-}
 
 #access-gate {
   max-width: 540px;
@@ -106,108 +102,7 @@ body:not([data-access="granted"]) > :not(#access-gate) {
   display: none !important;
 }</style>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const gate = document.createElement("section");
-  gate.id = "access-gate";
-  gate.innerHTML = `
-    <h1>Welcome to the Museum</h1>
-    <p id="access-message" role="status">Checking your payment…</p>
-    <button id="access-retry" type="button" hidden>Check again</button>
-    <a href="index.html">Back to entrance</a>
-  `;
-  document.body.prepend(gate);
 
-  const message = document.getElementById("access-message");
-  const retry = document.getElementById("access-retry");
-  const tokenKey = "ifv_checkout_token";
-  const endpoint =
-    "https://zzjetguwyocfxiwdhmmt.supabase.co/functions/v1/check-museum-access";
-
-  let token = "";
-  let attempts = 0;
-  let busy = false;
-
-  const fragment = new URLSearchParams(location.hash.slice(1));
-  const returnedToken = fragment.get("checkout");
-
-  if (returnedToken && /^[a-f0-9]{64}$/.test(returnedToken)) {
-    token = returnedToken;
-
-    try {
-      localStorage.setItem(tokenKey, token);
-      history.replaceState(null, "", location.pathname + location.search);
-    } catch {
-      // Keep the return link usable if browser storage is unavailable.
-    }
-  } else {
-    try {
-      token = localStorage.getItem(tokenKey) || "";
-    } catch {
-      token = "";
-    }
-  }
-
-  if (!/^[a-f0-9]{64}$/.test(token)) {
-    message.textContent =
-      "Please begin your visit using the button on the entrance page.";
-    return;
-  }
-
-  async function checkPayment() {
-    if (busy) return;
-    busy = true;
-    retry.hidden = true;
-    attempts += 1;
-
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ checkout_token: token }),
-        signal: AbortSignal.timeout(60000)
-      });
-
-      if (!response.ok) {
-        throw new Error("Payment check failed");
-      }
-
-      const result = await response.json();
-
-      if (result.paid === true) {
-        document.body.dataset.access = "granted";
-        gate.remove();
-        return;
-      }
-
-      message.textContent =
-        "Your payment has not been confirmed yet. This page will check again automatically.";
-
-      if (attempts < 30) {
-        setTimeout(checkPayment, 10000);
-      } else {
-        message.textContent =
-          "Confirmation is taking longer than expected. You can check again below.";
-        retry.hidden = false;
-      }
-    } catch {
-      message.textContent =
-        "We could not check your payment. Please try again.";
-      retry.hidden = false;
-    } finally {
-      busy = false;
-    }
-  }
-
-  retry.addEventListener("click", () => {
-    attempts = 0;
-    message.textContent = "Checking your payment…";
-    checkPayment();
-  });
-
-  checkPayment();
-});
-</script>
 </head>
     
 <body>
