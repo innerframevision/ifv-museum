@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bridge, Kyiv, Triptych — Inner Frame Constructs</title>
+
+<style>
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background: #000000;
+    font-family: Arial, sans-serif;
+}
+
+.ifv-navigation {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: #17130e;
+    border-bottom: 1px solid #9b7843;
+}
+
+.ifv-navigation a {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 18px;
+    border: 1px solid #9b7843;
+    border-radius: 2px;
+    color: #e3c794;
+    background: #17130e;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.ifv-navigation a:hover {
+    background: #352919;
+    color: #fff3d6;
+}
+
+
+/* ROOM */
+
+.room {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #000;
+}
+
+.room-background {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+
+/* VIDEO INSIDE THE CENTRAL FRAME */
+
+.room-video {
+    position: absolute;
+
+    left: 49%;
+    top: 47%;
+
+    width: 26%;
+    height: auto;
+
+    transform: translate(-50%, -50%);
+
+    object-fit: contain;
+}
+
+
+/* TITLE ON THE FLOOR */
+
+.room-title {
+    position: absolute;
+
+    left: 50%;
+    top: 77%;
+
+    transform: translateX(-50%);
+
+    color: #b8924f;
+    font-size: clamp(11px, 1.05vw, 17px);
+    letter-spacing: 4px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    .room-title {
+        letter-spacing: 2px;
+        font-size: 10px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<nav class="ifv-navigation" aria-label="Museum navigation">
+    <a href="stamps-exhibition.html">← Back</a>
+    <a href="museum.html">Museum</a>
+</nav>
+
+
+<div class="room">
+
+    <img
+        src="stamp1.jpg"
+        class="room-background"
+        alt="Philatelic exhibition room"
+    >
+
+    <video
+        class="room-video"
+        src="stamp1-web.mp4"
+        controls
+        playsinline
+        preload="metadata">
+    </video>
+
+    <div class="room-title">
+        /BRIDGE, KYIV, TRIPTYCH/
+    </div>
+
+</div>
+
+</body>
+
+</html>
