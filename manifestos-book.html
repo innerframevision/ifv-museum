@@ -1,1 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Inner Frame Vision — Manifestos</title>
+
+<style>
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background: #050505;
+    color: #b8924f;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.topbar {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #17130e;
+    border-bottom: 1px solid #9b7843;
+}
+
+.topbar a {
+    color: #e3c794;
+    text-decoration: none;
+    border: 1px solid #9b7843;
+    padding: 10px 18px;
+}
+
+.book {
+    width: 90vw;
+    max-width: 900px;
+    margin: 45px auto 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.book img {
+    width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 0 0 30px rgba(0,0,0,0.75);
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.controls button {
+    background: #17130e;
+    color: #e3c794;
+    border: 1px solid #9b7843;
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.controls button:hover {
+    background: #352919;
+}
+
+#pageNumber {
+    min-width: 80px;
+    text-align: center;
+    color: #b8924f;
+    letter-spacing: 2px;
+}
+
+@media (max-width: 700px) {
+
+    .book {
+        width: 96vw;
+        margin-top: 25px;
+    }
+
+    .controls {
+        gap: 12px;
+    }
+
+    .controls button {
+        padding: 9px 15px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <a href="tabularium.html">← Tabularium</a>
+    <a href="museum.html">Museum</a>
+</div>
+
+<div class="book">
+    <img id="bookPage"
+         src="inner-frame-manifestos.001.jpeg"
+         alt="Inner Frame Vision Manifestos">
+</div>
+
+<div class="controls">
+    <button onclick="previousPage()">←</button>
+
+    <div id="pageNumber">1 / 30</div>
+
+    <button onclick="nextPage()">→</button>
+</div>
+
+<script>
+
+let currentPage = 1;
+const totalPages = 30;
+
+function showPage() {
+
+    const number = String(currentPage).padStart(3, '0');
+
+    document.getElementById('bookPage').src =
+        'inner-frame-manifestos.' + number + '.jpeg';
+
+    document.getElementById('pageNumber').textContent =
+        currentPage + ' / ' + totalPages;
+}
+
+function nextPage() {
+    if (currentPage < totalPages) {
+        currentPage++;
+        showPage();
+    }
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        showPage();
+    }
+}
+
+document.addEventListener('keydown', function(event) {
+
+    if (event.key === 'ArrowRight') nextPage();
+    if (event.key === 'ArrowLeft') previousPage();
+
+});
+
+</script>
+
+</body>
+</html>
